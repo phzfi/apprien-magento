@@ -1,0 +1,9 @@
+*.swp
+
+.DS_Store
+
+#PHZ Coding Convention enforcement
+#Use docker-compose.yml for dev env
+*.dev.yml
+
+.vagrant/
