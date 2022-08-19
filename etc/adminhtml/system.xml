@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="apprien" translate="label" sortOrder="450">
+            <label>Apprien</label>
+        </tab>
+        <section id="apprien_pricing" translate="label" type="text" sortOrder="300" showInDefault="1" showInStore="1" showInWebsite="1">
+            <label>Automatic pricing</label>
+            <tab>apprien</tab>
+            <resource>PHZ_ApprienMagento::pricing</resource>
+            <group id="general" translate="label" type="text" sortOrder="1" showInWebsite="1" showInStore="1" showInDefault="1">
+                <label>General</label>
+                <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInStore="1" showInWebsite="1" canRestore="1">
+                    <label>Enable Apprien Automatic Pricing</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+            <group id="authentication" translate="label" type="text" sortOrder="1" showInWebsite="1" showInStore="1" showInDefault="1">
+                <label>Authentication</label>
+                <field id="clientId" translate="label" type="text" sortOrder="20" showInDefault="1" showInStore="1" showInWebsite="1">
+                    <label>Client ID</label>
+                    <comment><![CDATA[Your Apprien client id.]]></comment>
+                </field>
+                <field id="clientSecret" translate="label" type="text" sortOrder="30" showInDefault="1" showInStore="1" showInWebsite="1">
+                    <label>Client secret</label>
+                    <comment><![CDATA[Your Apprien client secret.]]></comment>
+                </field>
+            </group>
+            <group id="provider" translate="label" type="text" sortOrder="1" showInStore="1" showInWebsite="1" showInDefault="1">
+                <label>Provider</label>
+                <field id="providerId" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Provider ID / Merchant ID</label>
+                    <comment><![CDATA[Your merchant id provided by Apprien that identifies your company, if you have access to more than one company. Normally you don't need to provide this.]]></comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

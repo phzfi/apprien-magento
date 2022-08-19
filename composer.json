@@ -1,0 +1,52 @@
+{
+    "name": "phz/apprien-magento",
+    "description": "Apprien magento extension",
+    "require": {
+        "php": "~8.1",
+        "magento/framework": "~101.0|~102.0|~103.0",
+        "magento/module-sales": "~101.0|~102.0|~103.0"
+    },
+    "type": "magento2-module",
+    "license": "MIT",
+    "version": "1.0.0",
+    "authors": [
+        {
+            "name": "PHZ",
+            "email": "support@phz.fi",
+            "homepage": "https://phz.fi"
+        },
+        {
+            "name": "Apprien",
+            "email": "support@phz.fi",
+            "homepage": "https://apprien.com"
+        }
+    ],
+    "support": {
+        "email": "support@phz.fi",
+        "issues": "https://phz.fi/"
+    },
+    "homepage": "https://apprien.com/",
+    "keywords": [
+        "Apprien",
+        "Magento 2"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "PHZ\\ApprienMagento\\": ""
+        }
+    },
+    "repositories": {
+        "magento": {
+            "type": "composer",
+            "url": "https://repo.magento.com/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "magento/composer-dependency-version-audit-plugin": true
+        }
+    }
+}
