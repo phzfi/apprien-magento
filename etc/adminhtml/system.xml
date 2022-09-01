@@ -25,18 +25,19 @@
                 <label>Authentication</label>
                 <field id="clientId" translate="label" type="text" sortOrder="20" showInDefault="1" showInStore="1" showInWebsite="1">
                     <label>Client ID</label>
-                    <comment><![CDATA[Your Apprien client id.]]></comment>
                 </field>
-                <field id="clientSecret" translate="label" type="text" sortOrder="30" showInDefault="1" showInStore="1" showInWebsite="1">
+                <field id="clientSecret" translate="label" type="password" sortOrder="30" showInDefault="1" showInStore="1" showInWebsite="1">
                     <label>Client secret</label>
-                    <comment><![CDATA[Your Apprien client secret.]]></comment>
+                    <comment model="PHZ\ApprienMagento\Model\AuthenticationComment" />
                 </field>
             </group>
             <group id="provider" translate="label" type="text" sortOrder="1" showInStore="1" showInWebsite="1" showInDefault="1">
                 <label>Provider</label>
-                <field id="providerId" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Provider ID / Merchant ID</label>
-                    <comment><![CDATA[Your merchant id provided by Apprien that identifies your company, if you have access to more than one company. Normally you don't need to provide this.]]></comment>
+                <field id="providerId" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Company</label>
+                    <frontend_model>PHZ\ApprienMagento\Block\Adminhtml\Form\Field\Provider</frontend_model>
+                    <source_model>PHZ\ApprienMagento\Model\Config\Source\Provider</source_model>
+                    <comment model="PHZ\ApprienMagento\Model\ProviderComment" />
                 </field>
             </group>
         </section>

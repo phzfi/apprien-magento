@@ -4,12 +4,13 @@ namespace PHZ\ApprienMagento\Observer;
 
 use DateTime;
 use Exception;
-use JetBrains\PhpStorm\ArrayShape;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use PHZ\ApprienMagento\Model\Deal;
 use PHZ\ApprienMagento\Service\ApprienApiService;
 use Psr\Log\LoggerInterface;
+use Throwable;
 
 class OrderPlaceAfter implements ObserverInterface
 {
@@ -18,8 +19,8 @@ class OrderPlaceAfter implements ObserverInterface
     protected ScopeConfigInterface $scopeConfig;
 
     public function __construct(
-        LoggerInterface $logger,
-        ApprienApiService $apprienApiService,
+        LoggerInterface      $logger,
+        ApprienApiService    $apprienApiService,
         ScopeConfigInterface $scopeConfig,
     )
     {
@@ -40,42 +41,37 @@ class OrderPlaceAfter implements ObserverInterface
                 }
                 $locationId = $item->getStoreId();
                 $productId = $item->getProductId();
-                $providerId = $this->scopeConfig->getValue("apprien_pricing/provider/providerId");
                 $resourceId = is_null($item->getCustomerGroupId()) ? 1 : $item->getCustomerGroupId() + 1;
-                $times = $this->qtyToTimes($item->getQtyOrdered());
-                $body = [
-                    "productName" => $item->getName(),
-                    "startTime" => $times["startTime"],
-                    "endTime" => $times["endTime"],
-                    "price" => round($item->getRowTotalInclTax() * 100),
-                    "dealId" => $data["increment_id"]
-                ];
-                $this->apprienApiService->patchDeal($locationId, $productId, $resourceId, $body, $providerId);
+                $deal = new Deal(
+                    $item->getName(),
+                    $item->getQtyOrdered(),
+                    round($item->getRowTotalInclTax() * 100),
+                    intval($data["increment_id"])
+                );
+                $this->apprienApiService->patchDeal($locationId, $productId, $resourceId, $deal);
+
+                // test Price??
+                $prices = $this->apprienApiService->getPrices($productId, new DateTime(), (new DateTime())->modify("+30 minutes"));
+                $this->logger->info("Prices", ["prices" => print_r($prices, true)]);
+
+                // log products
+                $products = $this->apprienApiService->getProducts();
+                $this->logger->info("Products", ["products" => print_r($products, true)]);
+
+                // log product
+                $product = $this->apprienApiService->getProduct($productId);
+                $this->logger->info("Product", ["products" => print_r($product, true)]);
+
+                // log sales
+                $sales = $this->apprienApiService->getProductSales(
+                    $productId,
+                    (new DateTime())->modify("-1 month"),
+                    new DateTime()
+                );
+                $this->logger->info("Sales", ["sales" => print_r($sales, true)]);
             }
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             $this->logger->error("Apprien order placement error", ["exception" => $e]);
         }
-        throw new Exception();
-    }
-
-    #[ArrayShape(["startTime" => "string", "endTime" => "string"])] private function qtyToTimes($qty): array
-    {
-        $duration = $qty * 15;
-        $startTime = $this->roundDown(new DateTime());
-        $endTime = $this->roundDown((new DateTime())->modify("+{$duration} minutes"));
-        $formatString1 = "Y-m-d";
-        $formatString2 = "H:i:sP";
-        return [
-            "startTime" => $startTime->format($formatString1) . "T" . $startTime->format($formatString2),
-            "endTime" => $endTime->format($formatString1) . "T" . $endTime->format($formatString2)
-        ];
-    }
-
-    private function roundDown(DateTime $date): DateTime
-    {
-        return date_create()->setTime(
-            $date->format("H"),
-            floor($date->format("i") / 15) * 15
-        );
     }
 }
