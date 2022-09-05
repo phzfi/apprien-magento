@@ -101,6 +101,10 @@ Note! PHZ Coding Convention: name this environment as stg.
 
 ### 4.2. Deployment
 
+Stg environment is used for demo purposes and running on PHZ infrastructure. PHZ Devops can deploy the service by running:
+
+docker/deploy.sh stg stg
+
 ### 4.3. Smoke Tests
 
 #### 4.3.1. Automated Test Cases
